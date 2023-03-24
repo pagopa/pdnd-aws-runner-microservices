@@ -35,6 +35,13 @@ jobs:
             @semantic-release/git@10.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: VPN Setup
+        uses: ./.github/actions/ovpn-connect
+        with:
+          OVPN_USERNAME: ${{ secrets.OVPN_USERNAME }}
+          OVPN_CLIENT_KEY: ${{ secrets.OVPN_CLIENT_KEY }}
+          OVPN_TLS_AUTH_KEY: ${{ secrets.OVPN_TLS_AUTH_KEY }}
 
       - name: Log in to the Container registry
         id: docker_login
