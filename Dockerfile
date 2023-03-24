@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https=2.4.8 \
     lsb-release=11.1.0ubuntu4 \
     gnupg=2.2.27-3ubuntu2.1 \
-    git=1:2.34.1-1ubuntu1.8
+    git=1:2.34.1-1ubuntu1.8 \
+    software-properties-common=0.99.22.6
 
 # GitHub Runner installation
 RUN mkdir actions-runner
@@ -77,6 +78,17 @@ RUN mv kubectl /usr/local/bin/ && chmod +x /usr/local/bin/kubectl
 RUN curl https://baltocdn.com/helm/signing.asc | apt-key add
 RUN echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
 RUN apt-get update && apt-get -y install helm=3.11.2-1
+
+# Terraform Installation
+RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
+    gpg --dearmor | \
+    tee /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+    gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint && \
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+    tee /etc/apt/sources.list.d/hashicorp.list
+
+RUN apt update && apt-get install terraform=1.3.9
+
 
 # Java Installation
 RUN apt-get install -y \
