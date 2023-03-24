@@ -1,1 +1,8 @@
 .tmp
+#Terraform 
+**/.terraform/*
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.tfsec
+tfplan
