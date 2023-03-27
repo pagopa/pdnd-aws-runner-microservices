@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y \
     lsb-release=11.1.0ubuntu4 \
     gnupg=2.2.27-3ubuntu2.1 \
     git=1:2.34.1-1ubuntu1.8 \
-    software-properties-common=0.99.22.6
-
+    software-properties-common=0.99.22.6 \
+    gettext-base
 # GitHub Runner installation
 RUN mkdir actions-runner
 WORKDIR /actions-runner
