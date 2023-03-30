@@ -1,10 +1,8 @@
-FROM ubuntu:22.04@sha256:a8fe6fd30333dc60fc5306982a7c51385c2091af1e0ee887166b40a905691fd0
-
+FROM summerwind/actions-runner-dind:v2.303.0-ubuntu-22.04
+USER root
 ARG KUBECTL_VERSION=1.22.15
-ARG GITHUB_RUNNER_VERSION=2.298.2
-ARG GITHUB_RUNNER_VERSION_SHA="0bfd792196ce0ec6f1c65d2a9ad00215b2926ef2c416b8d97615265194477117"
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl=7.81.0-1ubuntu1.10 \
     lzip=1.23-1 \
     unzip=6.0-26ubuntu3.1 \
@@ -14,19 +12,8 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https=2.4.8 \
     lsb-release=11.1.0ubuntu4 \
     gnupg=2.2.27-3ubuntu2.1 \
-    git=1:2.34.1-1ubuntu1.8 \
     software-properties-common=0.99.22.6 \
-    gettext-base
-# GitHub Runner installation
-RUN mkdir actions-runner
-WORKDIR /actions-runner
-
-RUN curl -o actions-runner-linux-x64-${GITHUB_RUNNER_VERSION}.tar.gz -L https://github.com/actions/runner/releases/download/v${GITHUB_RUNNER_VERSION}/actions-runner-linux-x64-${GITHUB_RUNNER_VERSION}.tar.gz && \
-    echo "${GITHUB_RUNNER_VERSION_SHA}  actions-runner-linux-x64-${GITHUB_RUNNER_VERSION}.tar.gz" | sha256sum -c && \
-    tar xzf ./actions-runner-linux-x64-${GITHUB_RUNNER_VERSION}.tar.gz && \
-    rm actions-runner-linux-x64-${GITHUB_RUNNER_VERSION}.tar.gz
-
-RUN	bash bin/installdependencies.sh
+    gettext-base=0.21-4ubuntu4 
 
 # AWS CLI Installation
 WORKDIR /tmp
@@ -87,25 +74,15 @@ RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
     tee /etc/apt/sources.list.d/hashicorp.list
 
-RUN apt update && apt-get install terraform=1.3.9
-
+RUN apt update && apt-get install --no-install-recommends terraform=1.3.9
 
 # Java Installation
-RUN apt-get install -y \
+RUN apt-get install -y --no-install-recommends \
     openjdk-17-jdk=17.0.6+10-0ubuntu1~22.04 \
     openjdk-17-jre=17.0.6+10-0ubuntu1~22.04 \
     maven=3.6.3-5
 
-# GitHub user configuration
-RUN useradd github && \
-    mkdir -p /home/github && \
-    chown -R github:github /home/github && \
-    chown -R github:github /actions-runner
-
-WORKDIR /home/github
-
-COPY entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
-
-USER github
-ENTRYPOINT ["/home/github/entrypoint.sh"]
+USER runner
+WORKDIR /home/runner
+ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["entrypoint-dind.sh"]
