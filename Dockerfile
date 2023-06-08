@@ -1,4 +1,4 @@
-FROM summerwind/actions-runner-dind:v2.303.0-ubuntu-22.04
+FROM summerwind/actions-runner-dind:v2.304.0-ubuntu-22.04
 USER root
 ARG KUBECTL_VERSION=1.22.15
 
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq=1.6-2.1ubuntu3 \
     ca-certificates=20211016ubuntu0.22.04.1 \
     wget=1.21.2-2ubuntu1 \
-    apt-transport-https=2.4.8 \
+    apt-transport-https=2.4.9 \
     lsb-release=11.1.0ubuntu4 \
     gnupg=2.2.27-3ubuntu2.1 \
     software-properties-common=0.99.22.6 \
@@ -78,8 +78,8 @@ RUN apt update && apt-get install --no-install-recommends terraform=1.3.9
 
 # Java Installation
 RUN apt-get install -y --no-install-recommends \
-    openjdk-17-jdk=17.0.6+10-0ubuntu1~22.04 \
-    openjdk-17-jre=17.0.6+10-0ubuntu1~22.04 \
+    openjdk-17-jdk=17.0.7+7~us1-0ubuntu1~22.04.2 \
+    openjdk-17-jre=17.0.7+7~us1-0ubuntu1~22.04.2 \
     maven=3.6.3-5
 
 USER runner
