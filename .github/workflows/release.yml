@@ -2,6 +2,7 @@ name: Release
 
 on:
   # Trigger the workflow on push on the main branch
+  workflow_dispatch:
   push:
     branches:
       - PA-376
