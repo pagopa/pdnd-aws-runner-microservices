@@ -1,4 +1,4 @@
-FROM summerwind/actions-runner-dind:v2.304.0-ubuntu-22.04
+FROM summerwind/actions-runner-dind-rootless:v2.305.0-ubuntu-22.04
 USER root
 ARG KUBECTL_VERSION=1.22.15
 
@@ -7,12 +7,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lzip=1.23-1 \
     unzip=6.0-26ubuntu3.1 \
     jq=1.6-2.1ubuntu3 \
-    ca-certificates=20211016ubuntu0.22.04.1 \
+    ca-certificates=20230311ubuntu0.22.04.1 \
     wget=1.21.2-2ubuntu1 \
     apt-transport-https=2.4.9 \
     lsb-release=11.1.0ubuntu4 \
     gnupg=2.2.27-3ubuntu2.1 \
-    software-properties-common=0.99.22.6 \
+    software-properties-common=0.99.22.7 \
     gettext-base=0.21-4ubuntu4 
 
 # AWS CLI Installation
@@ -46,7 +46,7 @@ rsal1y/q+bPzpsnWjzHV8+1/EtZmSc8ZUGSJOPkfC7hObnfkl18h+1QtKTjZme4d\n\
 H17gsBJr+opwJw/Zio2LMjQBOqlm3K1A4zFTh7wBC7He6KPQea1p2XAMgtvATtNe\n\
 YLZATHZKTJyiqA==\n\
 =vYOk\n\
------END PGP PUBLIC KEY BLOCK--- --"
+-----END PGP PUBLIC KEY BLOCK-----"
 
 RUN gpg --import awscli-pgp && \
     curl -o awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" && \ 
@@ -74,7 +74,12 @@ RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
     tee /etc/apt/sources.list.d/hashicorp.list
 
-RUN apt update && apt-get install --no-install-recommends terraform=1.3.9
+# RUN apt update && apt-get install --no-install-recommends terraform
+RUN curl -LO https://releases.hashicorp.com/terraform/1.3.9/terraform_1.3.9_linux_amd64.zip && \
+    unzip terraform_1.3.9_linux_amd64.zip && \
+    mv terraform /usr/local/bin/terraform && \
+    chmod +x /usr/local/bin/terraform
+
 
 # Java Installation
 RUN apt-get install -y --no-install-recommends \
