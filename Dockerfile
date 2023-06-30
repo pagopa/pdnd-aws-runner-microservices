@@ -90,4 +90,4 @@ RUN apt-get install -y --no-install-recommends \
 USER runner
 WORKDIR /home/runner
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["entrypoint-dind.sh"]
+CMD ["entrypoint-dind-rootless.sh"]
