@@ -6,3 +6,4 @@
 *.tfstate.*
 *.tfsec
 tfplan
+**/.idea/*
