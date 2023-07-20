@@ -2,14 +2,13 @@ name: Release
 
 on:
   # Trigger the workflow on push on the main branch
-  workflow_dispatch:
   push:
     branches:
-      - PA-376
+      - main
     paths-ignore:
-      - "CODEOWNERS"
-      - "**.md"
-      - ".**"
+      - 'CODEOWNERS'
+      - '**.md'
+      - '.**'
 
 jobs:
   release:
@@ -25,20 +24,20 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      # - name: Release
-      #   id: release
-      #   # from https://github.com/cycjimmy/semantic-release-action/commits/main
-      #   uses: cycjimmy/semantic-release-action@bdd914ff2423e2792c73475f11e8da603182f32d
-      #   with:
-      #     semantic_version: 18.0.0
-      #     extra_plugins: |
-      #       @semantic-release/release-notes-generator@10.0.3
-      #       @semantic-release/git@10.0.1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        id: release
+        # from https://github.com/cycjimmy/semantic-release-action/commits/main
+        uses: cycjimmy/semantic-release-action@bdd914ff2423e2792c73475f11e8da603182f32d
+        with:
+          semantic_version: 18.0.0
+          extra_plugins: |
+            @semantic-release/release-notes-generator@10.0.3
+            @semantic-release/git@10.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: VPN Setup
-        uses: ./.github/actions/ovpn-connect
+        uses: pagopa/pdnd-github-actions/ovpn-connect@2153ca2f61cb93e54dea5100957759c0c2772dab
         with:
           OVPN_USERNAME: ${{ secrets.OVPN_USERNAME }}
           OVPN_CLIENT_KEY: ${{ secrets.OVPN_CLIENT_KEY }}
@@ -63,10 +62,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ vars.IMAGE_REGISTRY_URL }}/${{ github.repository }}:PA-376
-          # tags: |
-          #   ${{ vars.IMAGE_REGISTRY_URL }}/${{ github.repository }}:latest
-          #   ${{ vars.IMAGE_REGISTRY_URL }}/${{ github.repository }}:v${{ steps.release.outputs.new_release_version }}
+            ${{ vars.IMAGE_REGISTRY_URL }}/${{ github.repository }}:latest
+            ${{ vars.IMAGE_REGISTRY_URL }}/${{ github.repository }}:v${{ steps.release.outputs.new_release_version }}
           labels: |
             maintainer=https://pagopa.it
             org.opencontainers.image.source=https://github.com/${{ github.repository }}

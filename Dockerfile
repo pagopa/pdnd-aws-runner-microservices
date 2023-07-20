@@ -2,9 +2,9 @@ FROM summerwind/actions-runner-dind-rootless:v2.305.0-ubuntu-22.04
 USER root
 ARG KUBECTL_VERSION=1.22.15
 
-# Imposta una variabile d'ambiente per override dell'indirizzo IP di default utilizzato (per raggiungere i container in esecuzione tramite Testcontainers)
+# To override the default IP address used (Testcontainers)
 ENV TESTCONTAINERS_HOST_OVERRIDE=localhost
-# Imposta una variabile d'ambiente per disabilitare l'utilizzo di Ryuk (un container ausiliario utilizzato per la pulizia delle risorse dopo il termine dell'esecuzione dei test)
+# To disable the use of Ryuk (it doesn't work in rootless mode)
 ENV TESTCONTAINERS_RYUK_DISABLED=true
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
