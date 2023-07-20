@@ -35,7 +35,7 @@ jobs:
             @semantic-release/git@10.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      
       - name: VPN Setup
         uses: pagopa/pdnd-github-actions/ovpn-connect@2153ca2f61cb93e54dea5100957759c0c2772dab
         with:
@@ -51,7 +51,7 @@ jobs:
         with:
           registry: ${{ vars.IMAGE_REGISTRY_URL }}
           username: ${{ secrets.NEXUS_USERNAME }}
-          password: ${{ secrets.NEXUS_PASSWORD }}
+          password: ${{ secrets.NEXUS_PASSWORD }} 
 
       - name: Build and push Docker image
         id: docker_build_push
@@ -66,4 +66,4 @@ jobs:
             ${{ vars.IMAGE_REGISTRY_URL }}/${{ github.repository }}:v${{ steps.release.outputs.new_release_version }}
           labels: |
             maintainer=https://pagopa.it
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }} 
