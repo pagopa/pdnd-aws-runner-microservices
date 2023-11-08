@@ -20,3 +20,15 @@ variable "image_registry_url" {
   type        = string
   description = "docker registry url"
 }
+variable "runner_cluster_name" {
+  type        = string
+  description = "cluster name of the runners"
+}
+variable "runner_service_account" {
+  type        = string
+  description = "service account used by runners"
+}
+variable "runner_k8s_namespace" {
+  type        = string
+  description = "k8s namespace of the runners"
+}

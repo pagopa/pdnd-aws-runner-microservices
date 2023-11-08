@@ -3,8 +3,6 @@ repo_owner="pagopa"
 github_secret_arn="arn:aws:secretsmanager:eu-central-1:688071769384:secret:pdnd_github-nKAIES"
 nexus_secret_arn="arn:aws:secretsmanager:eu-central-1:688071769384:secret:prod/infra/nexus_admin_credentials-yCyTIm"
 image_registry_url="gateway.private.pdnd.pagopa.it"
-
-
-
-
-
+runner_k8s_namespace="prod-github-runners"
+runner_service_account="github-actions-sa"
+runner_cluster_name="pdnd-cicd"

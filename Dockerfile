@@ -88,8 +88,7 @@ RUN curl -LO https://releases.hashicorp.com/terraform/1.3.9/terraform_1.3.9_linu
 
 # Java Installation
 RUN apt-get install -y --no-install-recommends \
-    openjdk-17-jdk=17.0.7+7~us1-0ubuntu1~22.04.2 \
-    openjdk-17-jre=17.0.7+7~us1-0ubuntu1~22.04.2 \
+    openjdk-17-jdk \
     maven=3.6.3-5
 
 USER runner

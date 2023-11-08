@@ -1,0 +1,55 @@
+name: test new eks cicd
+on:
+    workflow_dispatch:
+    push:
+      branches:
+        - main
+      paths-ignore:
+        - 'CODEOWNERS'
+        - '**.md'
+        - '.**'
+permissions:
+  id-token: write   
+  contents: read        
+jobs:
+    release:
+      name: Release
+      runs-on: ubuntu-22.04
+      steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume:  ${{ secrets.RUNNER_DEPLOY_ROLE }}
+          aws-region: eu-central-1      
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@1f9a0c22da41e6ebfa534300ef656657ea2c6707
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Release
+        id: release
+        uses: cycjimmy/semantic-release-action@bdd914ff2423e2792c73475f11e8da603182f32d
+        with:
+          semantic_version: 18.0.0
+          extra_plugins: |
+            @semantic-release/release-notes-generator@10.0.3
+            @semantic-release/git@10.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_BOT }}
+      - name: Create AWS ECR repository
+        uses: pagopa/pdnd-github-actions/create-ecr-repository@master
+        with:
+          repositoryName: ${{ github.event.repository.name }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY:  ${{ github.event.repository.name }}
+          IMAGE_TAG: v${{ steps.release.outputs.new_release_version }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:latest
