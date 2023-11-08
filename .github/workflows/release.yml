@@ -19,7 +19,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume:  ${{ secrets.RUNNER_DEPLOY_ROLE }}
+          role-to-assume:  ${{ secrets.PUBLIC_RUNNER_ECR_ROLE }}
           aws-region: eu-central-1      
       - name: Checkout
         id: checkout
