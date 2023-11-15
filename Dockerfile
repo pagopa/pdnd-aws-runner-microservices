@@ -8,17 +8,18 @@ ENV TESTCONTAINERS_HOST_OVERRIDE=localhost
 ENV TESTCONTAINERS_RYUK_DISABLED=true
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl=7.81.0-1ubuntu1.10 \
-    lzip=1.23-1 \
-    unzip=6.0-26ubuntu3.1 \
-    jq=1.6-2.1ubuntu3 \
+    curl \
+    lzip \
+    unzip \
+    jq \
     ca-certificates=20230311ubuntu0.22.04.1 \
-    wget=1.21.2-2ubuntu1 \
+    wget \
     apt-transport-https=2.4.9 \
     lsb-release=11.1.0ubuntu4 \
     gnupg=2.2.27-3ubuntu2.1 \
     software-properties-common=0.99.22.7 \
-    gettext-base=0.21-4ubuntu4 
+    gettext-base=0.21-4ubuntu4 \
+    amazon-ecr-credential-helper
 
 # AWS CLI Installation
 WORKDIR /tmp
@@ -89,7 +90,7 @@ RUN curl -LO https://releases.hashicorp.com/terraform/1.3.9/terraform_1.3.9_linu
 # Java Installation
 RUN apt-get install -y --no-install-recommends \
     openjdk-17-jdk \
-    maven=3.6.3-5
+    maven=3.6.3-5 
 
 USER runner
 WORKDIR /home/runner
