@@ -1,4 +1,4 @@
-FROM summerwind/actions-runner-dind-rootless:v2.305.0-ubuntu-22.04
+FROM summerwind/actions-runner-dind-rootless:v2.305.0-ubuntu-22.04@sha256:cad8577529a5446a21fd8827fb14eab69469e011276f7418a0d85ae8bc5626d5
 USER root
 ARG KUBECTL_VERSION=1.22.15
 
